@@ -18,49 +18,66 @@ public class P03_MetadatesTest {
         Connection conn = DriverManager.getConnection(dbUrl, dbUserName, dbPassword);
 
         // Create statement from Connection to runQueries
-        Statement statement = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        Statement statement = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
 
         // using with statement we will execute query
-        ResultSet rs = statement.executeQuery("select * from regions");
+        ResultSet rs=statement.executeQuery("select * from regions");
 
 
-//DAtaBAse Metodata
+        // Database Metadata --> Information about database
 
         DatabaseMetaData dbMetaData = conn.getMetaData();
+
         System.out.println(dbMetaData.getUserName());
         System.out.println(dbMetaData.getDatabaseProductName());
         System.out.println(dbMetaData.getDatabaseProductVersion());
         System.out.println(dbMetaData.getDriverName());
         System.out.println(dbMetaData.getDriverVersion());
 
-
         /*
-        You will not use it as a testing purpose. This is extra information about MetaData
+        You will not use it as a testing purpose.This is extra information about Metadata
          */
 
         //ResultSet MetaData
 
         ResultSetMetaData rsmd = rs.getMetaData();
 
-        //how many column we have
+        // how many column we have
         int columnCount = rsmd.getColumnCount();
         System.out.println(columnCount);
 
-        //How can we learn columnName for second column
+
+        // how can we learn columnName for second column
         System.out.println(rsmd.getColumnName(2));
 
         System.out.println("Dynamic print");
-        //print all column name sa dynamicly
-        for (int i = 1; i <= columnCount; i++) {
+        //print all comun name as dynamicly
+        for (int i = 1; i <=columnCount; i++) {
             System.out.println(rsmd.getColumnName(i));
 
         }
-        //region id=1
-        //region name-europe
-        while (rs.next()){
-            for (int i = 1; i <= columnCount; i++) {
-                System.out.println(rsmd.getColumnName(i) + "-" + rs.getString(i));
 
+        /*
+        GOOD TO KNOW
+        - How can I get data dynamicly?
+            - while loop with rs.next() to iterate each row
+            - with the help of rs we get data (getString-getObject-getInt etc ) from related column
+            - we learned  getting column name and columnCount with rsmd
+                    rsmd.getColumnName(index);
+                    rsmd.getColumnCount();
+            ResultSet
+                    rs.next();   -- > to iterate each row
+                    rs.getString(index)  --> to get data from related column
+            ResultMetaData
+                     rsmd.getColumnCount()    -->  to get column Get
+                     rsmd.getColumnName(index) --> to get column information / name
+         */
+        // REGION ID-1
+        // REGION NAME-EUROPE
+        while(rs.next()){
+
+            for (int i = 1; i <=columnCount; i++) {
+                System.out.println(rsmd.getColumnName(i)+"-"+rs.getString(i));
             }
 
     }
